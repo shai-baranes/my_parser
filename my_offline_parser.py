@@ -11,7 +11,7 @@ import sys
 
 quiet = False
 
-def print_message(message: str):
+def print_message(message: str): # printing a warning message when encounter a line that is not parse applicalble
 	"""
 	Print message to STDOUT if the quiet option is set to False (this is the default).
 	:param message: message to print
@@ -118,7 +118,7 @@ def main():
 	parser = argparse.ArgumentParser(description='Generic log file parser application.')
 	parser.add_argument('-i', '--input', required=True, help='Log file to read from')
 	# parser.add_argument('-l', '--log-format', required=True, choices=['apache', 'apache_error'], help='Type of log to parse')
-	parser.add_argument('-o', '--output', help='Type of log to parse')
+	parser.add_argument('-o', '--output', help='Output file (appends data)')
 	parser.add_argument('-q', '--quiet', help='Do not print informative message', action='store_true')
 	args = parser.parse_args()
 	input_file = args.input
@@ -133,8 +133,8 @@ def main():
 
 	if output: # if output file is given via cmd line
 		with open(output, 'w') as file: # of -> 'output file'
-			for item in parsed_logs:
-				file.write(str(item)+'\n')
+			for item in parsed_logs: # for each dict in list of dicts
+				file.write(str(item)[1:-1]+'\n') # the [:] slicing is for trimming the dictionaries boundaries "{}""
 	else:
 		print(json.dumps(parsed_logs, indent=2))
 
@@ -154,3 +154,7 @@ def main():
 if __name__ == "__main__":
 	main()
 
+
+
+# example for cmd prompt line:
+# > my_offline_parser.py -i log.txt -o koko.txt  # if was configured for txt file
